@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.JarURLConnection;
 import java.util.ArrayList;
 
 public class ConcentrationGame {
@@ -17,7 +18,8 @@ public class ConcentrationGame {
         // Frame that comes up in the beginning of the game to show the player instructions
         JFrame instructionFrame = new JFrame();
 
-        JPanel root = new JPanel();
+        JPanel grid = new JPanel();
+        JPanel gameInfo = new JPanel();
         JPanel instructionPanel = new JPanel();
 
         JLabel title = new JLabel("Welcome to Concentration!");
@@ -34,18 +36,31 @@ public class ConcentrationGame {
         instructions.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
 
         JButton closeInstructions = new JButton("Close Instructions");
+        JButton help = new JButton("Instructions");
+        JButton muteMusic = new JButton("Mute Music");
 
         BorderLayout layout = new BorderLayout();
 
+        // button on instruction screen to close the instruction page
         closeInstructions.setSize(100, 100);
         closeInstructions.addActionListener(e -> {
-            instructionFrame.dispose();
+            instructionFrame.setVisible(false);
         });
 
-        root.setLayout(new GridLayout(3, 4));
-        root.setBorder(new EmptyBorder(10, 10, 10, 10));
+        // Button at bottom of game screen to allow instructions to be re-opened
+        help.addActionListener(e -> {
+            instructionFrame.setVisible(true);
+        });
 
-        frame.add(root);
+        muteMusic.addActionListener(e -> {
+
+        });
+
+        grid.setLayout(new GridLayout(3, 4));
+        grid.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        frame.add(grid, BorderLayout.CENTER);
+        frame.add(gameInfo, BorderLayout.SOUTH);
         frame.setSize(750, 650);
         frame.setVisible(true);
         frame.setResizable(false);
@@ -63,6 +78,8 @@ public class ConcentrationGame {
         instructionPanel.add(closeInstructions, BorderLayout.SOUTH);
         instructionPanel.add(instructions, BorderLayout.CENTER);
 
+        gameInfo.add(help);
+
 
         // Creates a new arrayList of buttons(cards)
         ArrayList<JButton> buttons = new ArrayList<>();
@@ -72,10 +89,10 @@ public class ConcentrationGame {
             buttons.add(new JButton());
         }
 
-        // Goes through each button in the arrayList and adds it to the root panel and adds the card image
+        // Goes through each button in the arrayList and adds it to the grid panel and adds the card image
         // to the button
         for (JButton button : buttons) {
-            root.add(button);
+            grid.add(button);
             button.setIcon(new ImageIcon("backOfCard.png"));
 
             // adds an action listener to each button in the arrayList
@@ -83,8 +100,6 @@ public class ConcentrationGame {
                 System.out.println("test");
             });
         }
-
-        ArrayList<BufferedImage> images = new ArrayList<>();
 
     }
 
@@ -106,6 +121,7 @@ public class ConcentrationGame {
 
         audio.close();
         */
+
 
     }
 }
