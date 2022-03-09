@@ -1,5 +1,6 @@
 import javax.sound.sampled.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,9 +12,35 @@ import java.util.ArrayList;
 public class ConcentrationGame {
 
     public ConcentrationGame() {
+        // Main frame where game is played
         JFrame frame = new JFrame();
-        JPanel root = new JPanel();
+        // Frame that comes up in the beginning of the game to show the player instructions
+        JFrame instructionFrame = new JFrame();
 
+        JPanel root = new JPanel();
+        JPanel instructionPanel = new JPanel();
+
+        JLabel title = new JLabel("Welcome to Concentration!");
+        JLabel instructions = new JLabel();
+
+        title.setHorizontalAlignment(title.CENTER);
+        title.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
+
+        // <html> tags were added to allow the JLabel to have text wrapping
+        instructions.setText("<html> To play concentration, you have to click on 2 of the cards\n that are laid out on the screen," +
+                " and try to get a match. Each match gets you 1 point. You will have 1 minute to find all the matches." +
+                " After the time is up, however many matches you get before the time is up will be your score." +
+                " Good Luck! </html>");
+        instructions.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
+
+        JButton closeInstructions = new JButton("Close Instructions");
+
+        BorderLayout layout = new BorderLayout();
+
+        closeInstructions.setSize(100, 100);
+        closeInstructions.addActionListener(e -> {
+            instructionFrame.dispose();
+        });
 
         root.setLayout(new GridLayout(3, 4));
         root.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -23,26 +50,43 @@ public class ConcentrationGame {
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
 
+        instructionFrame.add(instructionPanel);
+        instructionFrame.setVisible(true);
+        instructionFrame.setResizable(false);
+        instructionFrame.setSize(350, 350);
+        instructionFrame.setLocationRelativeTo(null);
+
+        instructionPanel.setLayout(layout);
+        instructionPanel.add(title, BorderLayout.NORTH);
+        instructionPanel.add(closeInstructions, BorderLayout.SOUTH);
+        instructionPanel.add(instructions, BorderLayout.CENTER);
+
+
+        // Creates a new arrayList of buttons(cards)
         ArrayList<JButton> buttons = new ArrayList<>();
 
+        // Loops 12 times and creates 12 different cards(buttons) and adds them to an arrayList of buttons
         for (int i=0; i<12; i++) {
             buttons.add(new JButton());
         }
 
-        for (int i=0; i<buttons.size(); i++) {
-            root.add(buttons.get(i));
+        // Goes through each button in the arrayList and adds it to the root panel
+        for (JButton button : buttons) {
+            root.add(button);
         }
 
-        for (int i=0; i<buttons.size(); i++) {
-            buttons.get(i).setIcon(new ImageIcon("backOfCard.png"));
+        // Loops through each button in the arrayList and sets the icon to the back of a playing card
+        for (JButton button : buttons) {
+            button.setIcon(new ImageIcon("backOfCard.png"));
         }
 
         ArrayList<BufferedImage> images = new ArrayList<>();
 
-
-        for (int i=0; i< buttons.size(); i++) {
-            buttons.get(i).addActionListener( e ->  {
+        // Loops through each button in the arrayList and adds an actionListener to each button
+        for (JButton button : buttons) {
+            button.addActionListener(e -> {
                 System.out.println("test");
             });
         }
@@ -50,9 +94,12 @@ public class ConcentrationGame {
     }
 
     public static void main(String[] args) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+        // Creates a new instance of the ConcentrationGame
         new ConcentrationGame();
 
+        // Code to play background music in-game was gotten from a classmate
 
+        /*
         FileInputStream input = new FileInputStream("songysongsong.wav");
 
         BufferedInputStream buffInput = new BufferedInputStream(input);
@@ -64,5 +111,7 @@ public class ConcentrationGame {
         clip.start();
 
         audio.close();
+        */
+
     }
 }
