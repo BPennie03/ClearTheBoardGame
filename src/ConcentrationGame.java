@@ -72,24 +72,19 @@ public class ConcentrationGame {
             buttons.add(new JButton());
         }
 
-        // Goes through each button in the arrayList and adds it to the root panel
+        // Goes through each button in the arrayList and adds it to the root panel and adds the card image
+        // to the button
         for (JButton button : buttons) {
             root.add(button);
-        }
-
-        // Loops through each button in the arrayList and sets the icon to the back of a playing card
-        for (JButton button : buttons) {
             button.setIcon(new ImageIcon("backOfCard.png"));
-        }
 
-        ArrayList<BufferedImage> images = new ArrayList<>();
-
-        // Loops through each button in the arrayList and adds an actionListener to each button
-        for (JButton button : buttons) {
+            // adds an action listener to each button in the arrayList
             button.addActionListener(e -> {
                 System.out.println("test");
             });
         }
+
+        ArrayList<BufferedImage> images = new ArrayList<>();
 
     }
 
@@ -97,10 +92,9 @@ public class ConcentrationGame {
         // Creates a new instance of the ConcentrationGame
         new ConcentrationGame();
 
-        // Code to play background music in-game was gotten from a classmate
 
         /*
-        FileInputStream input = new FileInputStream("songysongsong.wav");
+        FileInputStream input = new FileInputStream("backgroundMusic.wav");
 
         BufferedInputStream buffInput = new BufferedInputStream(input);
 
