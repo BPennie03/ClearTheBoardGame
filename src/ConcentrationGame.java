@@ -2,17 +2,23 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.JarURLConnection;
 import java.util.ArrayList;
 
 public class ConcentrationGame {
 
-    public ConcentrationGame() {
+    private int numButtons;
+
+    public ConcentrationGame() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         // Main frame where game is played
         JFrame frame = new JFrame();
         // Frame that comes up in the beginning of the game to show the player instructions
@@ -22,22 +28,23 @@ public class ConcentrationGame {
         JPanel gameInfo = new JPanel();
         JPanel instructionPanel = new JPanel();
 
-        JLabel title = new JLabel("Welcome to Concentration!");
+        JLabel title = new JLabel("Welcome to Clear the Board!");
         JLabel instructions = new JLabel();
 
         title.setHorizontalAlignment(title.CENTER);
         title.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
 
         // <html> tags were added to allow the JLabel to have text wrapping
-        instructions.setText("<html> To play concentration, you have to click on 2 of the cards\n that are laid out on the screen," +
-                " and try to get a match. Each match gets you 1 point. You will have 1 minute to find all the matches." +
-                " After the time is up, however many matches you get before the time is up will be your score." +
-                " Good Luck! </html>");
+        instructions.setText("<html> Clear the board is simple, all you have to do is clear the board! Click" +
+                "on a button to remove it, and remove all the buttons as fast as you can! The faster the time, " +
+                "the better the score. Good Luck! </html>");
         instructions.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
 
         JButton closeInstructions = new JButton("Close Instructions");
         JButton help = new JButton("Instructions");
         JButton muteMusic = new JButton("Mute Music");
+
+        JSlider slider = new JSlider();
 
         BorderLayout layout = new BorderLayout();
 
@@ -52,11 +59,13 @@ public class ConcentrationGame {
             instructionFrame.setVisible(true);
         });
 
-        muteMusic.addActionListener(e -> {
+        //slider.addChangeListener(this);
+        slider.setPaintTicks(true);
+        slider.setPaintTrack(true);
+        slider.setMajorTickSpacing(10);
+        slider.setPaintLabels(true);
 
-        });
-
-        grid.setLayout(new GridLayout(3, 4));
+        grid.setLayout(new GridLayout(10, 10));
         grid.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         frame.add(grid, BorderLayout.CENTER);
@@ -70,22 +79,29 @@ public class ConcentrationGame {
         instructionFrame.add(instructionPanel);
         instructionFrame.setVisible(true);
         instructionFrame.setResizable(false);
-        instructionFrame.setSize(350, 350);
+        instructionFrame.setSize(450, 450);
         instructionFrame.setLocationRelativeTo(null);
 
         instructionPanel.setLayout(layout);
         instructionPanel.add(title, BorderLayout.NORTH);
         instructionPanel.add(closeInstructions, BorderLayout.SOUTH);
         instructionPanel.add(instructions, BorderLayout.CENTER);
+        instructionPanel.add(slider, BorderLayout.SOUTH);
 
         gameInfo.add(help);
 
+// *** START OF GAME ***
 
-        // Creates a new arrayList of buttons(cards)
+        // Creates a new arrayList of buttons
         ArrayList<JButton> buttons = new ArrayList<>();
 
-        // Loops 12 times and creates 12 different cards(buttons) and adds them to an arrayList of buttons
-        for (int i=0; i<12; i++) {
+        // Method to play music in background
+        playMusic();
+
+        int randNum = (int)(Math.random() * 5) + 1;
+
+        // Loops x amount of times to populate the game board
+        for (int i=0; i<100; i++) {
             buttons.add(new JButton());
         }
 
@@ -93,22 +109,30 @@ public class ConcentrationGame {
         // to the button
         for (JButton button : buttons) {
             grid.add(button);
-            button.setIcon(new ImageIcon("backOfCard.png"));
+            button.setIcon(new ImageIcon("cheatham.png"));
 
             // adds an action listener to each button in the arrayList
             button.addActionListener(e -> {
-                System.out.println("test");
+                button.setVisible(false);
+                buttons.remove(button);
+
+                if (buttons.size() == 0) {
+                    System.exit(0);
+                }
             });
         }
 
     }
 
+
+
     public static void main(String[] args) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
         // Creates a new instance of the ConcentrationGame
         new ConcentrationGame();
 
+    }
 
-        /*
+    public void playMusic() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         FileInputStream input = new FileInputStream("backgroundMusic.wav");
 
         BufferedInputStream buffInput = new BufferedInputStream(input);
@@ -120,8 +144,5 @@ public class ConcentrationGame {
         clip.start();
 
         audio.close();
-        */
-
-
     }
 }
